@@ -26,7 +26,7 @@ Disclaimer: before we get started, here's a quick reminder that you shouldn't tr
 - Solder
 - A molex picoblade connector
 - A Dremel (totally buy a Dremel rather than using a combination of pliers and a drill)
-- A bigger battery (https://www.amazon.com/gp/product/B00MZJBQHU/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
+- [A bigger battery](https://www.amazon.com/gp/product/B00MZJBQHU/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
 - A pair of Logitech H800 headphones
 - A solid workbench (definitely not your coffee table or the fireplace - DO AS I SAY AND NOT AS I DO!)
 
