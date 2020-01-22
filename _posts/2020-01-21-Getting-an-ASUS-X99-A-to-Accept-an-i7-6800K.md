@@ -18,20 +18,20 @@ I started by taking out all but one stick of DDR4, trying it in multiple slots. 
 
 I tested that the RAM I had was working in another computer and I tried some known-good DDR4 from another computer (CMK16GX4M2B3000C15). Again, status code 53.
 
-I looked up the Qualified Vendor List (QVL) table for the motherboard and both RAM and CPU were on there ([https://www.asus.com/us/Motherboards/X99A/HelpDesk_CPU/]).
+I looked up the Qualified Vendor List (QVL) table for the motherboard and both RAM and CPU were on there (<https://www.asus.com/us/Motherboards/X99A/HelpDesk_CPU/>).
 
-However, the CPU was marked as only being support from BIOS version 3004 onwards (updated BIOS version available here: [https://www.asus.com/us/Motherboards/X99A/HelpDesk_BIOS/]). I couldn't be sure, but based upon the last 4 of my sticker, I likely only had BIOS version 1004 ([https://forums.tomshardware.com/threads/asus-x99-a-error-53-cannot-use-bios-flashback.3016607/])
+However, the CPU was marked as only being support from BIOS version 3004 onwards (updated BIOS version available here: <https://www.asus.com/us/Motherboards/X99A/HelpDesk_BIOS/>). I couldn't be sure, but based upon the last 4 of my sticker, I likely only had BIOS version 1004 (<https://forums.tomshardware.com/threads/asus-x99-a-error-53-cannot-use-bios-flashback.3016607/>)
 
 ## Trying to flash the BIOS using ASUS Flashback
 
-This motherboard (along with many recent ASUS boards) supports something called BIOS Flashback ([https://forums.tomshardware.com/threads/asus-x99-a-usb-3-1-usb-flashback-bios.2755390/]).
+This motherboard (along with many recent ASUS boards) supports something called BIOS Flashback (<https://forums.tomshardware.com/threads/asus-x99-a-usb-3-1-usb-flashback-bios.2755390/>).
 
 It allows the motherboard BIOS to be updated from USB key with neither a working CPU nor working RAM.
 
 However, I couldn't for the life of me get it to work - the flashback light would flash 4 times then go solid blue, indicating a failure. My understanding from reading online is that it should keep flashing for a couple minutes.
 
 I verified that:
-- I'd correctly renamed the downloaded BIOS file to the one listed here: [https://www.asus.com/us/support/FAQ/1030124/]
+- I'd correctly renamed the downloaded BIOS file to the one listed here: <https://www.asus.com/us/support/FAQ/1030124/>
 - I only had a single primary partition marked as active and non-bootable.
 - I was inserting the USB key into the correct port (if I moved it to another port, it would instead flash 7 times, acting the same as when no USB key was inserted at all)
 - Clearing CMOS made no difference (remove power from computer; remove onboard battery for 15s or more; move jumper to clear real-time clock; move jumper back; reinsert battery; power on)
@@ -43,8 +43,8 @@ After many hours, I gave up trying to do a Flashback.
 I looked at buying an older CPU that was supported on this board from day 1 (i7 5820K or Xeon E5-1620v3.)
 
 I saw that I could order a new BIOS chip that would come with the latest BIOS e.g.:
-- [https://www.ebay.com/itm/BIOS-CHIP-ASUS-X99-A-/380942685656]
-- [http://www.bios-chip24.com/Asus-X99-A/USB-31/en]
+- <https://www.ebay.com/itm/BIOS-CHIP-ASUS-X99-A-/380942685656>
+- <http://www.bios-chip24.com/Asus-X99-A/USB-31/en>
 
 But perhaps there was another way?
 
@@ -52,7 +52,7 @@ But perhaps there was another way?
 
 The BIOS chip is just an EEPROM chip and can't a Raspberry Pi program EEPROM chips? Why - yes it can!
 
-Here's an article on the process: [https://tomvanveen.eu/flashing-bios-chip-raspberry-pi/]
+Here's a blog post on the process: <https://tomvanveen.eu/flashing-bios-chip-raspberry-pi/>
 
 So I found the BIOS chip and tried to remove it from the motherboard (without the proper tool - obviously).
 
@@ -60,7 +60,7 @@ So I found the BIOS chip and tried to remove it from the motherboard (without th
 
 I got it loose, but one of the legs was badly bent. I crossed my fingers and bent it back into place.
 
-I found the datasheet for the BIOS chip ([https://www.winbond.com/resource-files/w25q128fv%20rev.m%2005132016%20kms.pdf]) and compared that with both the article above and the Raspberry Pi GPIO documentation ([https://www.raspberrypi.org/documentation/usage/gpio/]), coming up with this table:
+I found the datasheet for the BIOS chip (<https://www.winbond.com/resource-files/w25q128fv%20rev.m%2005132016%20kms.pdf>) and compared that with both the article above and the Raspberry Pi GPIO documentation (<https://www.raspberrypi.org/documentation/usage/gpio/>), coming up with this table:
 
 | RPi PIN | description | connection | PIN Name        | Description         | EEPROM PIN |
 | ------- | ----------- | ---------- | --------------- | ------------------- | ---------- |
@@ -103,7 +103,7 @@ Now back to the article - oh - now I see the working command was there all along
 
 Finally, I think I'm ready, I read off the existing BIOS with `flashrom -p linux_spi:dev=/dev/spidev0.0,spispeed=512 -r flash.dat`. Note that it takes a couple minutes.
 
-Looking at the filesizes though, it looks like my .CAP file is too large. After a little more googling, I find the answer in this StackExchange question ([https://superuser.com/questions/678996/what-options-do-i-have-for-flashing-an-uefi-bios-chip-on-an-asus-mobo]): The .CAP filetype has a CAP header of 2048 bytes.
+Looking at the filesizes though, it looks like my .CAP file is too large. After a little more googling, I find the answer in this StackExchange question (<https://superuser.com/questions/678996/what-options-do-i-have-for-flashing-an-uefi-bios-chip-on-an-asus-mobo>): The .CAP filetype has a CAP header of 2048 bytes.
 
 Using the command from that question (`dd bs=2048 skip=1 if=BIOS.CAP of=BIOS.BIN`), I strip the CAP header and compare the filesizes again. They now match. Here goes nothing: `flashrom -p linux_spi:/dev/spidev0.0 -w BIOS.BIN`
 
